@@ -772,8 +772,8 @@ export default function SubmitPage() {
     setRows((prev) => prev.filter((r) => r._rowIndex !== index));
   };
 
-  const validRows = rows.filter((r) => r._valid);
-  const invalidRows = rows.filter((r) => !r._valid);
+  // const validRows = rows.filter((r) => r._valid);
+  // const invalidRows = rows.filter((r) => !r._valid);
 
   const handleSubmit = async () => {
     setConfirmOpen(false);
