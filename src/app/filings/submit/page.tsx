@@ -535,25 +535,25 @@ export default function SubmitPage() {
 
   const handleDownloadBatch = useCallback(async () => {
     setIsExportingBatch(true);
+    // Increased timeout to ensure all components in the batch are fully rendered
     setTimeout(async () => {
       try {
         const element = document.getElementById('print-batch-container');
         if (element) {
           const html2pdf = (await import('html2pdf.js' as any)).default;
           const opt = {
-            margin: 5,
+            margin: 0, // Reduced margin to prevent extra blank space
             filename: `OS9-Batch-${Date.now().toString().slice(-6)}.pdf`,
             image: { type: 'jpeg', quality: 0.98 },
             html2canvas: {
-              scale: 1.8,
+              scale: 2, // Increased scale for better clarity
               useCORS: true,
-              scrollY: 0,
-              scrollX: 0,
-              width: 820,
-              windowWidth: 820
+              logging: false,
+              letterRendering: true,
+              allowTaint: false
             },
             jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-            pagebreak: { mode: ['css', 'legacy'] }
+            pagebreak: { mode: ['css', 'legacy'], after: '.html2pdf-page-break' }
           };
           await html2pdf().set(opt).from(element).save();
         }
@@ -562,8 +562,8 @@ export default function SubmitPage() {
       } finally {
         setIsExportingBatch(false);
       }
-    }, 600);
-  }, []);
+    }, 1500); // Increased from 600ms to 1500ms
+  }, [validRows, senderInfo]);
 
   useEffect(() => {
     fetch('/api/settings')
@@ -1402,13 +1402,14 @@ export default function SubmitPage() {
       }
       
       .html2pdf-offscreen {
-        position: fixed !important;
-        left: 0 !important;
+        position: absolute !important;
+        left: -9999px !important;
         top: 0 !important;
-        z-index: -9999 !important;
+        z-index: 1000 !important;
         display: block !important;
         width: 820px !important;
         background-color: white !important;
+        overflow: visible !important;
       }
     ` }} />
     </>
