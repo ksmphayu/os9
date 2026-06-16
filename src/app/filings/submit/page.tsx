@@ -507,6 +507,9 @@ export default function SubmitPage() {
 
   const [isExportingBatch, setIsExportingBatch] = useState(false);
 
+  const validRows = rows.filter((r) => r._valid);
+  const invalidRows = rows.filter((r) => !r._valid);
+
   const handleDownloadSingle = useCallback(async (r: RowData) => {
     try {
       const element = document.querySelector('[role="dialog"] .os9-paper-to-print') || document.querySelector('.os9-paper-to-print');
